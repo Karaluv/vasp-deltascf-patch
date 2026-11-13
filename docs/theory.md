@@ -12,7 +12,7 @@ The corresponding conjugate block must preserve the anti-Hermitian generator. Ga
 
 PROJECT (`eta=0`) removes this component while the environment relaxes. REFLECT (`eta=-1`) reverses it. SECANT uses the signed raw `g=<q|F[P]|u>` and a local angular history, with damping 0.35, a ceiling 2.5 times the unmodified mode step, a 0.02-radian angle ceiling and protected fallback. A detected root crossing uses a soft reflected step. The initial SDA iteration is projected and is excluded from secant history.
 
-The actual Damped direction includes orbital velocity and the IROT=3 subspace rotation. Editing a Hamiltonian matrix alone would not filter this total direction. The patch measures the retracted PAW rotation after ORTHCH and applies bounded algebraic retries without rebuilding Fock or the density.
+The actual Damped direction includes orbital velocity and the IROT=3 subspace rotation. Editing a Hamiltonian matrix alone would not filter this total direction. The fast path measures the selected PAW two-plane after one ORTHCH and solves the finite Givens rotation exactly, without reorthogonalization or rebuilding Fock/density.
 
 ## Density diagnostics
 
@@ -28,7 +28,7 @@ A small c diagnoses control of the coherent pair rotation. h alone also contains
 
 ## Stationarity
 
-The target is the original occupied–virtual residual `Q F[P] P=0`, not a modified Hamiltonian or vanishing filtered gradient. The implementation exposes a subspace residual and an estimate from the available real orbital gradient. It does not claim an independently verified full-space residual. PROJECT is a preparation state even when its filtered update vanishes.
+The target is the original occupied–virtual residual `Q F[P] P=0`, not a modified Hamiltonian or vanishing filtered gradient. The default fast path exposes the original subspace residual. An expensive estimate from the available real orbital gradient is optional under TRACE_FULL_DIAG T. It does not claim an independently verified full-space residual. PROJECT is a preparation state even when its filtered update vanishes.
 
 The rough scaling `delta E ~ g²/curvature` requires a curvature estimate; a gradient tolerance alone does not guarantee a universal energy error.
 

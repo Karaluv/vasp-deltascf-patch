@@ -1,6 +1,6 @@
 # Forces and continuous geometry optimization
 
-Status: opt-in prototype implemented and compiled for the Ada GPU target. A two-ionic-step O38 test is running. Force accuracy, restart continuity and near-native speed are not yet validated.
+Status: opt-in unified prototype compiled for four GPU targets. The previous O38 test accepted the first geometry and evaluated native forces; the second did not pass the electronic gate within its budget. An updated FAST ionic test is separate. Force accuracy, restart continuity and near-native ionic speed remain unvalidated.
 
 The implementation uses one native VASP process: SECANT electronic solve, stationary-state acceptance gate, VASP native force/stress evaluation, native ionic optimizer, and an in-memory electronic restart on the next geometry. No external restart per ionic step is intended.
 
@@ -36,12 +36,12 @@ solve, and rechecks the final PAW identity before handing control to native forc
 
 The accepted occupied orbitals are only gauge-rotated in an internal copy, using
 a Householder transform to isolate the collective particle direction. The physical
-W used for forces is untouched. The copied reference stores h191/p192 and is
+W used for forces is untouched. The copied reference stores h/p in the configured reference slots and is
 reprojected and PAW-orthonormalized on the next geometry. The original on-disk NTO
 reference is never rewritten.
 
 The main-loop hooks surround ELECTRONIC_OPTIMIZATION. Native FORCE_AND_STRESS and
-the ionic optimizer are unchanged. Secant history resets at a geometry change.
+the ionic optimizer are unchanged. Angular/gradient history resets at a geometry change. A reliable signed curvature estimate is carried from the accepted point as an initial scale; it is not used as a stale gradient.
 The electronic CSVs add `ionic_step`; NTO_SADDLE_IONIC.csv records accepted steps
 and reference orthogonality. From step 2, h/p/c refer to the transported local
 reference, **not** to an unchanged initial-geometry NTO. Long-trajectory branch
@@ -53,3 +53,7 @@ The MPI source normalizes input `IWAVPR=0` to internal value 10. The prototype
 checks the effective predictor mode modulo 10, accepting both disabled forms.
 An initial prototype stopped at this guard before forces; the corrected build
 is used in the current two-step test.
+
+## Following-ion fast controls
+
+For IONIC_FOLLOW T and ionic_step>=2, the default recapture is 8 PROJECT steps, 5 REFLECT steps, then SECANT, with electronic TIME0.08. Keys: IONIC_N_PROJECT, IONIC_N_REFLECT, IONIC_TIME. Following SECANT requires at least6 stage steps and2 qualifying frames (IONIC_MIN_STEP/IONIC_STABLE_STEPS). Identity controls are IONIC_STOP_H_MAX0.05, IONIC_STOP_P_MIN0.90, IONIC_STOP_C_MAX0.08. Initial-ion controls remain STOP_*. Larger allowed local coherence is a working branch-following tolerance, not proof of a particular atomic-orbital rotation. FAST uses the raw subspace stopping scope described in the README; finite-difference force validation is still required.

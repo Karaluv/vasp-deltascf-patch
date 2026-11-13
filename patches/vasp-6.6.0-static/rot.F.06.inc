@@ -1,7 +1,7 @@
-      ! Full PAW S-norm of the *raw* EDWAV gradient outside the 224-band
+      ! Full PAW S-norm of the *raw* EDWAV gradient outside the current band
       ! subspace, before preconditioning. This is an external-gradient
       ! estimate, not asserted to be the exact dual-metric QFP norm.
-      IF(SADDLE_EXT_REQUESTED.AND.ISP==2.AND.N<=191.AND.IFLAG/=2) THEN
+      IF(SADDLE_EXT_REQUESTED.AND.(.NOT.SADDLE_FAST.OR.SADDLE_FULL_DIAG).AND.ISP==2.AND.N<=COUNT(W%FERTOT(:,1,2)>0.5_q).AND.IFLAG/=2) THEN
          DO ISPINOR=0,WDES1%NRSPINORS-1
             CALL FFTWAV(NGVECTOR,WDES1%NINDPW(1),WSEARCH%CR(1+ISPINOR*WDES1%GRID%MPLWV), &
                  WSEARCH%CW(1+ISPINOR*NGVECTOR),GRID)
