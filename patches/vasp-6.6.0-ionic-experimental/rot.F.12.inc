@@ -515,7 +515,7 @@ __GPU USE moffload
  SADDLE_IONIC_INDEX=ISTEP
  SADDLE_IONIC_ACCEPTED=.FALSE.
  IF(.NOT.SADDLE_IONIC_FOLLOW) RETURN
- IF(IWAVPR/=0) CALL vtutor%error('NTO_SADDLE ionic prototype requires IWAVPR=0')
+ IF(MOD(IWAVPR,10)/=0) CALL vtutor%error('NTO_SADDLE ionic prototype requires IWAVPR=0')
  IF(.NOT.SADDLE_REF_READY) CALL vtutor%error('NTO_SADDLE ionic reference not initialized')
  IF(ISTEP>1) THEN
 __GPU CALL OFFLOAD_ON_PUSH(.FALSE.)
@@ -550,7 +550,7 @@ __GPU USE moffload
  GDEF, ALLOCATABLE :: C(:,:),ORTH(:,:)
  OVERLAP :: CQIJ(LMDIM,LMDIM,WDES%NIONS,WDES%NCDIJ)
  IF(.NOT.SADDLE_IONIC_FOLLOW) RETURN
- IF(IWAVPR/=0.OR.ISIF>2) CALL vtutor%error('NTO_SADDLE ionic prototype requires IWAVPR=0 and fixed cell ISIF<=2')
+ IF(MOD(IWAVPR,10)/=0.OR.ISIF>2) CALL vtutor%error('NTO_SADDLE ionic prototype requires IWAVPR=0 and fixed cell ISIF<=2')
  IF(.NOT.SADDLE_IONIC_ACCEPTED) THEN
   CALL OUTWAV(IO,WDES,W,LATT_CUR,EFERMI,EXT='BAD')
   CALL vtutor%error('NTO_SADDLE: SECANT not stationary by configured estimates; refusing forces/ionic advancement')

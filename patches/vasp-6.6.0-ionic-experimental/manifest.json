@@ -8,7 +8,7 @@
     {
       "path": "src/rot.F",
       "before_sha256": "c29d1215940f09a3ef4d2242134314a00fb993c6a206f6a2a6b75da6b1825735",
-      "after_sha256": "1e15439c092a5612c2288e7d96eddddabcc6262e2c3d130dbf90a55890dc3577",
+      "after_sha256": "2f224039b73372014900b5fb95c1eca83fb390b543ac5f93bec5197f88652ae3",
       "edits": [
         {
           "start_line": 3,
@@ -99,7 +99,7 @@
           "end_line": 3624,
           "removed_sha256": "a8066e33c623a4bf08552b7426e302d22d2b76846c10eb98c4bbf8f1c669a172",
           "payload": "rot.F.12.inc",
-          "payload_sha256": "e8505f6a0244789bae0afb197e0e4ee01c4429766038cb1abe7f7fd38bbd91b3"
+          "payload_sha256": "9e24d55273f20f66085c5f5b4c9351432c2b217428fd7a0e7d37b4c80dd9f021"
         }
       ]
     },

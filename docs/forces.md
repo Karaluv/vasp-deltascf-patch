@@ -48,3 +48,8 @@ reference, **not** to an unchanged initial-geometry NTO. Long-trajectory branch
 identity requires additional diagnostics. A process restart with this rolling
 reference has not yet been implemented/validated; the current test is continuous
 inside one process.
+
+The MPI source normalizes input `IWAVPR=0` to internal value 10. The prototype
+checks the effective predictor mode modulo 10, accepting both disabled forms.
+An initial prototype stopped at this guard before forces; the corrected build
+is used in the current two-step test.
