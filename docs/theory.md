@@ -33,3 +33,9 @@ The target is the original occupied–virtual residual `Q F[P] P=0`, not a modif
 The rough scaling `delta E ~ g²/curvature` requires a curvature estimate; a gradient tolerance alone does not guarantee a universal energy error.
 
 For fixed occupations at a true electronic stationary point, electronic-response terms vanish in the derivative of the stationary branch energy, including at a saddle. Residual electronic error, branch changes and predictor/PAW transport errors still require force checks. See the [VASP force discussion](https://vasp.at/wiki/Hellmann-Feynman_forces).
+
+## Raw-gradient ascent safeguard (v0.2.1)
+
+Let A be the native preconditioned/inertial mode proposal and T the selected coefficient. With the implemented orientation delta u=delta_theta*q, delta_theta=-T*TIME*sqrt(p). Original first-order selected-mode energy change is2*g_raw*delta_theta. Thus ascent requires T*g_raw<=0. T*A<0 is insufficient: A includes momentum and a signed subspace preconditioner. The default SECANT safeguard now uses the raw-gradient condition and softens root crossings with the same orientation. It changes no Hamiltonian, occupations or energy derivatives. This is a first-order selected-mode statement; total finite energy can fall while the orthogonal modes relax. It does not establish a Hessian sign.
+
+The2.5|A| relative ceiling is retained. Near cancellation of the native inertial proposal can make it a convergence bottleneck even with correct direction. Optional SECANT_ROOT_STEP T follows the signed secant root proposal without the ascent veto and halves a crossing proposal; it is experimental and still uses the relative ceiling. No successful full-space stationary or force-accuracy claim follows from the direction correction alone.

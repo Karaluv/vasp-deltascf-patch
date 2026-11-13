@@ -15,3 +15,9 @@
 - Runtime occupied/reference indices and experimental AUTO schedule; seed preparation tool, preserving full records/reference and requiring native PAW preflight.
 - Static coherence trust corridor; following-ion8/5 recapture, curvature carry, TIME.08 and separate moving-reference tolerances.
 - Three-file unified implementation, clean MIT license; matched Ada overhead+0.7463%. Full residual and force accuracy remain unvalidated.
+
+##0.2.1 —2026-11-14
+
+- Correct default SECANT ascent orientation using original g_raw, not the total inertial native A. The previous A-sign test permitted mode-descent steps.
+- Keep relativecap2.5, damping0.35 and absoluteangle0.02 unchanged; document the remaining near-cancellation bottleneck.
+- Add opt-in experimental SECANT_ROOT_STEP and auditable target-kind fields. Four GPU targets compiled; same-seed direction regression is not a convergence or force proof.

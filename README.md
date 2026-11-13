@@ -36,7 +36,7 @@ Copy [examples/NTO_SADDLE](examples/NTO_SADDLE) and merge [examples/INCAR.fragme
 | OFF | 1 | Diagnostics with the original update; omit NTO_SADDLE for ordinary operation |
 | PROJECT | 0 | Remove one mode from the actual update; preparation only |
 | REFLECT | -1 | Reverse the selected update component |
-| SECANT | -1 | Damped one-mode secant correction with guarded REFLECT fallback |
+| SECANT | -1 | Damped one-mode secant correction with raw-gradient ascent safeguard |
 | AUTO | staged | PROJECT -> REFLECT -> SECANT in one process; N_PROJECT/N_REFLECT control durations (experimental) |
 
 Change thresholds in `NTO_SADDLE` before starting a run. **No recompilation is required for threshold changes.** The file is read once at startup and effective values are written to OUTCAR. Defaults without explicit STOP_* keys are conservative; the example contains the current exploratory policy.
@@ -52,6 +52,12 @@ Set `N_OCC_BETA`, `HOLE_BAND`, `REF_HOLE_BAND`, `REF_PART_BAND`. If occupied cou
 The default fast path uses two beta reference columns with VASP's native PAW `W1_DOT(...,CQIJ)`. It calls native ORTHCH once, then solves a finite-angle two-plane Givens correction and transports Damped velocity consistently. Full overlap matrices and repeated ORTHCH retries are absent from the fast electronic loop. Set `TRACE_FULL_DIAG T` for narrow/full PAW comparisons and global Gram checks.
 
 Static SECANT uses `TRUST_C T`, `TRUST_C_MAX 0.015`: above the threshold a proposal that increases coherence in the selected two-plane is redirected toward lower coherence. Other relaxation modes can still change the actual measured coherence. This safeguard never changes raw g_mode or establishes stationarity by itself. Ionic-follow calculations use their own moving-reference controls; see forces documentation.
+
+## Ascent guard and current limitation
+
+The default SECANT safeguard tests the original gradient, not the total native search direction: with `delta_theta=-TARGET*TIME*sqrt(p)`, first-order selected-mode work is `2*g_raw*delta_theta`. The native direction includes momentum and preconditioning, so `TARGET*A<0` alone does not establish ascent. Version0.2.1 corrects that test. A private same-seed O68 regression removed the observed wrong-sign mode steps; it has **not** established SCF convergence.
+
+The relative ceiling remains `2.5*abs(A)`. It can strongly limit the secant angle when the inertial direction nearly cancels despite a nonzero gradient. No runtime key disables that ceiling in this release. `SECANT_ROOT_STEP T` is a separate experimental signed-root policy that bypasses the ascent veto; it retains damping, both angle/relative limits and raw-residual acceptance. Its default is F and AUTO does not enable it.
 
 ## Acceptance and outputs
 
@@ -78,4 +84,4 @@ No VASP source is needed for the public tooling tests. Private apply/byte-compar
 
 MIT applies only to the original additions in this repository. VASP retains its own license and attribution. This is an independent project, not an official VASP release.
 
-Upgrading from v0.1.0: revert with that tagged patcher first, then apply this version to the pristine source. Both compatibility variants now contain the same unified three-file code; IONIC_FOLLOW remains opt-in and experimental.
+Upgrading from v0.1.0 or v0.2.0: revert with that tagged patcher first, then apply this version to the pristine source. Both compatibility variants now contain the same unified three-file code; IONIC_FOLLOW remains opt-in and experimental.
