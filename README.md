@@ -50,7 +50,7 @@ SECANT stops after three qualifying steps, with a minimum step index of 20 in th
 
 - [Theory](docs/theory.md): mode, PAW metric, projected/reflected steps and stopping.
 - [Implementation](docs/implementation.md): integration points, patch format, safeguards.
-- [Forces and ionic optimization](docs/forces.md): experimental development and validation gates.
+- [Forces and ionic optimization](docs/forces.md): opt-in compiled prototype, native-loop hooks and validation gates.
 - [Credits](CREDITS.md).
 
 ## Development
