@@ -1,0 +1,17 @@
+# Merge into your own licensed, scientifically matched input.
+ALGO = Damped
+TIME = 0.05
+LDIAG = .FALSE.
+LSUBROT = .FALSE.
+ISPIN = 2
+ISMEAR = -2
+NBANDS = 224
+FERWE = 192*1 32*0
+FERDO = 191*1 33*0
+ISTART = 1
+ICHARG = 0
+NSW = 0
+NELM = 200
+NELMIN = 20
+EDIFF = 1E-8
+# Preserve the intended functional, PAW, basis and cell settings.

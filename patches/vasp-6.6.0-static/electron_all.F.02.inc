@@ -1,0 +1,1 @@
+             MIX,N_MIX_PAW,IRDMAX,CHTOTL,RHOLM_LAST,N)

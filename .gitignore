@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.nto-dscf-backup/
+WAVECAR*
+POTCAR*
+*.o
+*.mod
+vasp_gam
+vasp_std
