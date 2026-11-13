@@ -1,4 +1,4 @@
-# VASP NTO ΔSCF
+# vasp-deltascf-patch
 
 **NTO-guided excited-state ΔSCF saddle-point optimization for VASP 6.6.0.**
 
