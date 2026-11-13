@@ -43,7 +43,7 @@ def patch(root,manifest,action):
  return {'variant':m['variant'],'files_changed':len(prepared),'action':action}
 
 def main():
- a=argparse.ArgumentParser(description=__doc__);a.add_argument('vasp_root',type=Path);a.add_argument('--variant',choices=['static','ionic-experimental'],default='static');g=a.add_mutually_exclusive_group();g.add_argument('--apply',action='store_true');g.add_argument('--revert',action='store_true');v=a.parse_args();manifest=Path(__file__).resolve().parents[1]/'patches'/('vasp-6.6.0-'+v.variant)/'manifest.json'
+ a=argparse.ArgumentParser(description=__doc__);a.add_argument('vasp_root',type=Path);a.add_argument('--variant',choices=['static','ionic-experimental'],default='static');g=a.add_mutually_exclusive_group();g.add_argument('--dry-run',action='store_true',help='Check without changing sources (default)');g.add_argument('--apply',action='store_true');g.add_argument('--revert',action='store_true');v=a.parse_args();manifest=Path(__file__).resolve().parents[1]/'patches'/('vasp-6.6.0-'+v.variant)/'manifest.json'
  try:print(json.dumps(patch(v.vasp_root,manifest,'apply' if v.apply else 'revert' if v.revert else 'check'),indent=2))
  except (OSError,ValueError,KeyError) as e:a.exit(1,str(e)+'\n')
 if __name__=='__main__':main()
