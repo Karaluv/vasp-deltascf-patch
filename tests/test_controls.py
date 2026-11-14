@@ -12,7 +12,7 @@ class Controls(unittest.TestCase):
  def test_nonfinite_controls_and_duplicate_keys_are_rejected(self):
   with tempfile.TemporaryDirectory() as td:
    p=Path(td)/'NTO_SADDLE'
-   for text in ['MODE SECANT\nSECANT_DAMPING nan\n','MODE SECANT\nSECANT_CAP_FACTOR inf\n','MODE SECANT\nETA -1\nETA -1\n','MODE SECANT\nSTOP_ON_EDIFF_ONLY T\n']:
+   for text in ['MODE SECANT\nSECANT_DAMPING nan\n','MODE SECANT\nSECANT_CAP_FACTOR inf\n','MODE SECANT\nETA -1\nETA -1\n','MODE SECANT\nSTOP_ON_EDIFF_ONLY T\n','MODE SECANT\nSAVE_IONIC_REFERENCE maybe\n','MODE SECANT\nN_OCC_BETA 191\nHOLE_BAND 191\n']:
     p.write_text(text)
     with self.assertRaises(ValueError):mod.check(p)
 if __name__=='__main__':unittest.main()

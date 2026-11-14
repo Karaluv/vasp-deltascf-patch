@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 — 2026-11-14
+
+- Tooling-only preflight validation for boolean flags and an empty hole outside the occupied beta block. Native source/binaries are unchanged from0.3.1; changing settings does not trigger a rebuild.
+
+
 ## 0.3.1 — 2026-11-14
 
 - Respect the native three-character OUTWAV suffix ABI. Accepted physical/local-reference snapshots use distinct base36 Ixy/Rxy names instead of truncating long suffixes.

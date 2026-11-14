@@ -27,6 +27,11 @@ def check(path,write_defaults=False):
  if stop not in TRUE|FALSE or (stop in TRUE)!=(mode=='OFF'):raise ValueError('OFF requires STOP_ON_EDIFF_ONLY T; active modes require F')
  for key in ['SPIN','N_OCC_BETA','N_OCC','HOLE_BAND','REF_HOLE_BAND','REF_PART_BAND','N_PROJECT','N_REFLECT','PRINT_EVERY','IONIC_MIN_STEP','IONIC_STABLE_STEPS','STOP_MIN_STEP','STOP_STABLE_STEPS']:
   if key in effective and (int(effective[key])<1 or str(int(effective[key]))!=effective[key]):raise ValueError(key+' must be a positive integer')
+ for key in ['FAST_PATH','TRACE_FULL_DIAG','TRUST_C','IONIC_FOLLOW','SECANT_ROOT_STEP','SAVE_IONIC_REFERENCE']:
+  if key in effective and effective[key].upper() not in TRUE|FALSE:raise ValueError(key+' must be logical T/F')
+ if 'N_OCC_BETA' in effective or 'N_OCC' in effective:
+  nocc=int(effective.get('N_OCC_BETA',effective.get('N_OCC')))
+  if 'HOLE_BAND' in effective and int(effective['HOLE_BAND'])<=nocc:raise ValueError('HOLE_BAND must be outside the occupied beta block')
  if 'SPIN' in effective and int(effective['SPIN'])!=2:raise ValueError('This release supports beta SPIN2 only')
  if 'N_OCC' in effective and 'N_OCC_BETA' in effective and effective['N_OCC']!=effective['N_OCC_BETA']:raise ValueError('Conflicting N_OCC aliases')
  damp=float(effective.get('SECANT_DAMPING',.35));cap=float(effective.get('SECANT_CAP_FACTOR',2.5));angle=float(effective.get('SECANT_MAX_ANGLE',.02))
