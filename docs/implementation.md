@@ -24,3 +24,6 @@ The patch supports one specified VASP 6.6.0 snapshot. Hash mismatch can indicate
 Runtime occupied/hole/reference indices replace fixed dimensions. The supported implementation remains single-rank Gamma-real beta-spin with contiguous binary occupations. Public search topics MOM, IMOM and constrained DFT describe related excited-state workflows, not additional implemented algorithms. No penalty, guide potential, level shift or occupation selector is included.
 
 Version0.2.1 changes only the SECANT direction safeguard and adds the opt-in SECANT_ROOT_STEP flag. NTO_FAST_TIMING.csv also records target_kind and secant_root_step. The default ascent test uses unmodified g_raw; relativecap2.5 and damping0.35 remain. Source-only apply/byte-equality/revert/idempotency checks match all four compiled targets; the live direction regression is distinct from stationary-state acceptance.
+
+
+Version0.3 adds finite runtime secant scales, aligned stopping defaults, a Python control preflight and opt-in accepted ionic wave/reference snapshots. No extra SCF overlap work is enabled by the snapshot flag. The one-binary modes and FAST/diagnostic selectors remain independent.

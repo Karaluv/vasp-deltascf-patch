@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-11-14
+
+- Align compiled stopping defaults with the calibrated runtime example (g6.5e-5eV, h0.08, p0.90, |c|0.02); no Hamiltonian changes.
+- Runtime SECANT_DAMPING, SECANT_CAP_FACTOR and SECANT_MAX_ANGLE with finite/bounds checks; defaults remain0.35/2.5/0.02.
+- Add a pre-submission control checker and correct OFF energy-only stop example.
+- Optional accepted ionic WAVECAR/local-reference snapshots; geometry/force/restart validation remains experimental.
+- Separate batch completion, estimated residual acceptance and independent OFF measurements in documentation.
+
+
 ## 0.1.0 — 2026-11-13
 
 - Exact-snapshot, context-free patcher for VASP 6.6.0.

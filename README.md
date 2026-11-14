@@ -85,3 +85,17 @@ No VASP source is needed for the public tooling tests. Private apply/byte-compar
 MIT applies only to the original additions in this repository. VASP retains its own license and attribution. This is an independent project, not an official VASP release.
 
 Upgrading from v0.1.0 or v0.2.0: revert with that tagged patcher first, then apply this version to the pristine source. Both compatibility variants now contain the same unified three-file code; IONIC_FOLLOW remains opt-in and experimental.
+
+
+## Runtime controls and preflight (v0.3)
+
+The SECANT controls `SECANT_DAMPING=0.35`, `SECANT_CAP_FACTOR=2.5`, and `SECANT_MAX_ANGLE=0.02` are read from NTO_SADDLE; write them as space-separated KEY VALUE lines, as in the example. Changing these or STOP_* values requires no recompilation. A zero cap factor disables only the relative cap and is an experimental option, not the default.
+
+```sh
+python3 tools/check_nto_controls.py examples/NTO_SADDLE
+python3 tools/check_nto_controls.py NTO_SADDLE --write-defaults
+```
+
+The checker never edits a file without --write-defaults. OFF requires `STOP_ON_EDIFF_ONLY T`; active modes require F. For a one-step OFF diagnostic use NELM=1. Its first trace row is measured before the ordinary update; the resulting updated WAVECAR is not a frozen-orbital oracle. Keep the original input separately.
+
+A completed batch/stock single point does not establish stationarity. Record the original residual criteria separately. In the matched-geometry diagnostic sample,64 retained-branch VASP–CP2K pairs gave mean absolute DeltaSCF difference0.022406177512856718eV and median0.01653939168030491eV; one case differed by0.23492180433524446eV. These compare implementations and accepted branches, not identical basis sets or a force benchmark.

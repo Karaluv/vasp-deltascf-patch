@@ -8,14 +8,14 @@
     {
       "path": "src/rot.F",
       "before_sha256": "c29d1215940f09a3ef4d2242134314a00fb993c6a206f6a2a6b75da6b1825735",
-      "after_sha256": "78121c7ecbf9876ff40a376cf173cd3994aa0b84644d1c0067ab8185733db9a8",
+      "after_sha256": "fa0f0cebd57645c2215df012dc64169f64e7f1983ee9aab06b8b737cffda8de8",
       "edits": [
         {
           "start_line": 3,
           "end_line": 3,
           "removed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "payload": "rot.F.00.inc",
-          "payload_sha256": "75063aedb5f6ccec82a656b34659a088d251e72ddc085f69ea8b49d4e9724745"
+          "payload_sha256": "99a2eb29cba0cb90cee7bd7ebde465382e57378280ed20206a77b4ee81ce29b3"
         },
         {
           "start_line": 78,
@@ -99,7 +99,7 @@
           "end_line": 3624,
           "removed_sha256": "a8066e33c623a4bf08552b7426e302d22d2b76846c10eb98c4bbf8f1c669a172",
           "payload": "rot.F.12.inc",
-          "payload_sha256": "6a3870ae28311738b100673c6a9677aa83ebe283f92fb6957a2b406f1b70f68e"
+          "payload_sha256": "7bf6b7bc049322c70be4bd6c58bf3fe754dd78770756b55eeb1784ba33a5a3c8"
         }
       ]
     },

@@ -57,3 +57,10 @@ is used in the current two-step test.
 ## Following-ion fast controls
 
 For IONIC_FOLLOW T and ionic_step>=2, the default recapture is 8 PROJECT steps, 5 REFLECT steps, then SECANT, with electronic TIME0.08. Keys: IONIC_N_PROJECT, IONIC_N_REFLECT, IONIC_TIME. Following SECANT requires at least6 stage steps and2 qualifying frames (IONIC_MIN_STEP/IONIC_STABLE_STEPS). Identity controls are IONIC_STOP_H_MAX0.05, IONIC_STOP_P_MIN0.90, IONIC_STOP_C_MAX0.08. Initial-ion controls remain STOP_*. Larger allowed local coherence is a working branch-following tolerance, not proof of a particular atomic-orbital rotation. FAST uses the raw subspace stopping scope described in the README; finite-difference force validation is still required.
+
+
+## Accepted-point snapshots (v0.3)
+
+`SAVE_IONIC_REFERENCE T` writes `WAVECAR.ionNNNN` for the physical accepted orbitals and `WAVECAR.refNNNN` for the transported local reference before native force evaluation. NTO_SADDLE_IONIC_CHECKPOINT.csv records the ionic index, saved curvature and suffixes. The original reference file is never rewritten. Pair snapshots with the corresponding accepted geometry/force record from vasprun.xml; a wave file alone does not prove that the following force calculation finished. Curvature serialization is diagnostic; automatic cross-process curvature/ionic-optimizer restoration is not yet implemented.
+
+The continuous O38 pilot completed two accepted native-force points in one process (20 and155 SCF iterations). Maximum forces were4.099030683053784 and3.5087842071791364eV/angstrom. Per-electronic-step timing stayed near the matched stock benchmark;155 iterations on the second point means near-GS ionic speed has not been established. Finite-difference force accuracy remains unvalidated.

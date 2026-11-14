@@ -20,3 +20,8 @@ FAST_PATH T
 TRACE_FULL_DIAG F
 TRUST_C T
 TRUST_C_MAX 0.015
+
+# Calibrated defaults; no rebuild needed for these controls.
+SECANT_DAMPING 0.35
+SECANT_CAP_FACTOR 2.5
+SECANT_MAX_ANGLE 0.02
