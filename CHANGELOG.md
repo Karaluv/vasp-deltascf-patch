@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 — 2026-11-14
+
+- Respect the native three-character OUTWAV suffix ABI. Accepted physical/local-reference snapshots use distinct base36 Ixy/Rxy names instead of truncating long suffixes.
+- All four GPU builds recompiled in separate directories; active v0.3 deltaSCF executables preserved.
+
+
 ## 0.3.0 — 2026-11-14
 
 - Align compiled stopping defaults with the calibrated runtime example (g6.5e-5eV, h0.08, p0.90, |c|0.02); no Hamiltonian changes.
