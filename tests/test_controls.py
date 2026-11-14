@@ -5,6 +5,9 @@ class Controls(unittest.TestCase):
  def test_off_defaults_are_energy_only_and_source_is_not_edited_by_default(self):
   with tempfile.TemporaryDirectory() as td:
    p=Path(td)/'NTO_SADDLE';p.write_text('MODE OFF\n');v=mod.check(p);self.assertEqual(v['explicit_defaults']['STOP_ON_EDIFF_ONLY'],'T');self.assertEqual(p.read_text(),'MODE OFF\n');mod.check(p,True);self.assertIn('STOP_ON_EDIFF_ONLY T',p.read_text())
+ def test_auto_can_skip_completed_stages_on_bounded_restart(self):
+  with tempfile.TemporaryDirectory() as td:
+   p=Path(td)/'NTO_SADDLE';p.write_text('MODE AUTO\nN_PROJECT 0\nN_REFLECT 40\n');self.assertTrue(mod.check(p)['valid'])
  def test_off_residual_stop_is_rejected(self):
   with tempfile.TemporaryDirectory() as td:
    p=Path(td)/'NTO_SADDLE';p.write_text('MODE OFF\nSTOP_ON_EDIFF_ONLY F\n')
