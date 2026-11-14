@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-11-14
+
+- Scientific toolkit: spin-resolved TDDFT NTO extraction, full-PAW M/leakage/band analysis, SCF trace summaries and completed ionic checkpoint export.
+- Seed preparation accepts a recorded source hash and emits NTO_SADDLE from a template with generated indices.
+- INCAR overlay merger, explicit single-rank launcher and seven complete workflow examples.
+- Native patch source is unchanged; no VASP rebuild is required for this tooling update.
+
+
 ## 0.3.2 — 2026-11-14
 
 - Tooling-only preflight validation for boolean flags and an empty hole outside the occupied beta block. Native source/binaries are unchanged from0.3.1; changing settings does not trigger a rebuild.

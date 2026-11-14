@@ -1,0 +1,27 @@
+# Hybrid response about the accepted excited input; energies/eigenvectors only.
+ALGO = TDHF
+IBSE = 2
+ISTART = 1
+ICHARG = 0
+ISPIN = 2
+ISMEAR = -2
+FERWE = 192*1 32*0
+FERDO = 191*1 33*0
+LDIAG = .FALSE.
+LSUBROT = .FALSE.
+NSW = 0
+NBANDS = 224
+NBANDSO = 180
+NBANDSV = 16
+NBSEEIG = 120
+LHFCALC = .TRUE.
+AEXX = 0.40
+HFSCREEN = 0.0
+LHARTREE = .TRUE.
+LADDER = .TRUE.
+LFXC = .TRUE.
+LSCAAWARE = .TRUE.
+LUSENCCL = .TRUE.
+IDIOT = 0
+LWAVE = .FALSE.
+LCHARG = .FALSE.

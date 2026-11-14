@@ -39,7 +39,11 @@ Copy [examples/NTO_SADDLE](examples/NTO_SADDLE) and merge [examples/INCAR.fragme
 | SECANT | -1 | Damped one-mode secant correction with raw-gradient ascent safeguard |
 | AUTO | staged | PROJECT -> REFLECT -> SECANT in one process; N_PROJECT/N_REFLECT control durations (experimental) |
 
-Change thresholds in `NTO_SADDLE` before starting a run. **No recompilation is required for threshold changes.** The file is read once at startup and effective values are written to OUTCAR. Defaults without explicit STOP_* keys are conservative; the example contains the current exploratory policy.
+Change thresholds in `NTO_SADDLE` before starting a run. **No recompilation is required for threshold changes.** The file is read once at startup and effective values are written to OUTCAR. Set STOP_* keys explicitly for reproducibility; the example contains the current exploratory policy.
+
+## Scientific toolkit and workflow examples
+
+[Tools index](tools/README.md) covers TDDFT/BSE -> NTO, canonical seed preparation, native PAW M/leakage analysis, SCF trace summaries and accepted ionic checkpoint export. [Seven workflow examples](examples/workflows/README.md) include AUTO, staged runs, original-stock preflight, continuous ionic optimization and hybrid excited-reference TDDFT. No licensed input data is shipped.
 
 ## Seed preparation and dimensions
 
@@ -57,7 +61,7 @@ Static SECANT uses `TRUST_C T`, `TRUST_C_MAX 0.015`: above the threshold a propo
 
 The default SECANT safeguard tests the original gradient, not the total native search direction: with `delta_theta=-TARGET*TIME*sqrt(p)`, first-order selected-mode work is `2*g_raw*delta_theta`. The native direction includes momentum and preconditioning, so `TARGET*A<0` alone does not establish ascent. Version0.2.1 corrects that test. A private same-seed O68 regression removed the observed wrong-sign mode steps; it has **not** established SCF convergence.
 
-The relative ceiling remains `2.5*abs(A)`. It can strongly limit the secant angle when the inertial direction nearly cancels despite a nonzero gradient. No runtime key disables that ceiling in this release. `SECANT_ROOT_STEP T` is a separate experimental signed-root policy that bypasses the ascent veto; it retains damping, both angle/relative limits and raw-residual acceptance. Its default is F and AUTO does not enable it.
+The relative ceiling remains `2.5*abs(A)`. It can strongly limit the secant angle when the inertial direction nearly cancels despite a nonzero gradient. Use SECANT_CAP_FACTOR to change that ceiling; zero explicitly disables only the relative cap (experimental). `SECANT_ROOT_STEP T` is a separate experimental signed-root policy that bypasses the ascent veto; it retains damping, both angle/relative limits and raw-residual acceptance. Its default is F and AUTO does not enable it.
 
 ## Acceptance and outputs
 

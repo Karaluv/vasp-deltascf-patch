@@ -50,6 +50,17 @@ class SeedTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 seed.prepare(args)
 
+    def test_seed_config_uses_generated_indices_and_checks_source_hash(self):
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp);src = root / 'reference';fixture(src)
+            template = root / 'template';template.write_text('MODE AUTO\nETA 0\nN_OCC_BETA 191\nHOLE_BAND 192\nREF_HOLE_BAND 191\nREF_PART_BAND 192\nSTOP_ON_EDIFF_ONLY F\n')
+            args = argparse.Namespace(reference=src,ground=None,output_dir=root/'out',n_occ_beta=None,ref_hole_band=None,ref_part_band=None,hole_band=None,gamma_real=True,saddle_template=template,expected_source_sha256=seed.sha256(src))
+            report = seed.prepare(args);self.assertTrue(report['source_hash_verified']);text=(root/'out/NTO_SADDLE').read_text();self.assertIn('N_OCC_BETA 2\n',text);self.assertIn('HOLE_BAND 3\n',text)
+            args.output_dir=root/'bad';args.expected_source_sha256='0'*64
+            with self.assertRaises(ValueError):seed.prepare(args)
+
     def test_nonadjacent_hole_slot_and_record_padding(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -212,6 +212,13 @@ def canonicalize(reference, output, nocc, ref_hole, ref_part, hole_band):
 def prepare(args):
     source = Path(args.reference or args.ground).resolve()
     before = sha256(source)
+    expected = getattr(args, 'expected_source_sha256', None)
+    if expected and (not re.fullmatch(r'[0-9a-fA-F]{64}', expected) or expected.lower() != before):
+        raise ValueError('Source hash does not match the supplied response/reference provenance')
+    template = getattr(args, 'saddle_template', None)
+    if template:
+        from check_nto_controls import check
+        check(template)
     wave = Wavecar(source)
     if wave.tag in [45200, 45210] and not args.gamma_real:
         raise ValueError('Legacy RTAG does not identify Gamma-real packing: assert known vasp_gam provenance with --gamma-real')
@@ -219,10 +226,10 @@ def prepare(args):
     rh, rp, q = args.ref_hole_band or nocc, args.ref_part_band or nocc + 1, args.hole_band or nocc + 1
     output = Path(args.output_dir).resolve()
     output.mkdir(parents=True, exist_ok=True)
-    names = ['WAVECAR', 'WAVECAR.qqq', 'nto_seed.json', 'INCAR.occupations', 'NTO_SADDLE.indices']
+    names = ['WAVECAR', 'WAVECAR.qqq', 'nto_seed.json', 'INCAR.occupations', 'NTO_SADDLE.indices'] + (['NTO_SADDLE'] if template else [])
     if any((output / name).exists() for name in names):
         raise ValueError('Refusing to overwrite an existing output')
-    report = {'source_sha256': before, 'nbands': wave.nbands, 'n_occ_beta': nocc, 'ref_hole_band': rh, 'ref_part_band': rp, 'hole_band': q, 'full_paw_identity': 'MISSING', 'status': 'PAW_PREFLIGHT_REQUIRED'}
+    report = {'source_hash_verified': bool(expected), 'gauge_provenance': 'user-supplied source SHA256 matched' if expected else 'MISSING: energies alone cannot prove matching orbital gauge', 'source_sha256': before, 'nbands': wave.nbands, 'n_occ_beta': nocc, 'ref_hole_band': rh, 'ref_part_band': rp, 'hole_band': q, 'full_paw_identity': 'MISSING', 'status': 'PAW_PREFLIGHT_REQUIRED'}
     temporary = output / '.WAVECAR.reference.tmp'
     with temporary.open('xb'):
         pass
@@ -240,6 +247,17 @@ def prepare(args):
             rotate_subspace(temporary, occupied, rh, u[:, 0], args.chunk_coefficients)
             rotate_subspace(temporary, virtual, rp, vh[0].conj(), args.chunk_coefficients)
             report.update(response_sha256=sha256(args.bsefatband),root=args.root,root_energy_ev=energy,beta_weight=norm,pair_fraction=fraction,response_eigenvalue_max_error_ev=mismatch)
+        if template:
+            values = {'N_OCC_BETA': str(nocc), 'HOLE_BAND': str(q), 'REF_HOLE_BAND': str(rh), 'REF_PART_BAND': str(rp)}
+            lines = []
+            for line in Path(template).read_text().splitlines():
+                words = line.split('#', 1)[0].split()
+                key = words[0].upper() if words else ''
+                if key == 'N_OCC': continue
+                lines.append(key + ' ' + values.pop(key) if key in values else line)
+            lines += [key + ' ' + value for key, value in values.items()]
+            (output / 'NTO_SADDLE').write_text('\n'.join(lines) + '\n')
+            check(output / 'NTO_SADDLE')
         permutation = canonicalize(temporary, output / 'WAVECAR', nocc, rh, rp, q)
         shutil.copyfile(temporary, output / 'WAVECAR.qqq')
         if args.reference and sha256(output / 'WAVECAR.qqq') != before:
@@ -269,6 +287,8 @@ def main():
     source.add_argument('--reference', type=Path, help='Existing NTO reference; copied unchanged')
     source.add_argument('--ground', type=Path, help='Matching ground-state Gamma-real WAVECAR')
     parser.add_argument('--bsefatband', type=Path)
+    parser.add_argument('--expected-source-sha256', help='Contemporaneous source hash; band energies alone do not establish orbital gauge')
+    parser.add_argument('--saddle-template', type=Path, help='Write NTO_SADDLE with generated indices replacing template indices')
     parser.add_argument('--gamma-real', action='store_true', help='Assert vasp_gam provenance when legacy RTAG cannot distinguish packing')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--root', type=int, default=1)

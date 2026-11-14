@@ -1,0 +1,16 @@
+# Original stock vasp_gam; merge with the matched ground Hamiltonian.
+ALGO = Eigenval
+ISTART = 1
+ICHARG = 0
+ISPIN = 2
+ISMEAR = -2
+FERWE = 192*1 32*0
+FERDO = 191*1 33*0
+LDIAG = .FALSE.
+LSUBROT = .FALSE.
+NSW = 0
+IBRION = -1
+NELM = 1
+NELMIN = 1
+LWAVE = .TRUE.
+LWSWQ = .TRUE.
